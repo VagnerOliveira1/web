@@ -28,6 +28,7 @@ const FrontHeader: React.FC = () => {
                     <Col md={8} xs={8}>
                         <FontAwesomeIcon icon={faUserCircle} color="var(--color-gray-light)" />
                     </Col>
+                    
                 </Row>
             </Col>
         </Row>
