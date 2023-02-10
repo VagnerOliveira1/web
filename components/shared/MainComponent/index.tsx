@@ -1,15 +1,19 @@
 import React from 'react';
-import Header  from '../Header/FrontHeader';
+import Header from '../Header/FrontHeader';
 import Footer from '../Footer/Front';
-const MainComponent: React.FC = ({ children }) => {
-      return (
+
+const MainComponent: React.FC = ({children}) => {
+    return (
         <div className="d-flex flex-column sticky-footer-wrapper">
-            <Header/>
-            <div className='container flex-fill'>
-              { children }
+            <Header />
+            
+            <div className="container flex-fill">
+                {children}
             </div>
-        <Footer/>     
+
+            <Footer />
         </div>
     )
 }
+
 export default MainComponent;

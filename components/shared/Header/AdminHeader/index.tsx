@@ -13,9 +13,9 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({name}) => {
     return(
       <Row className={styles.background}>
         <Col lg={6} xs>
-          <Link href="/Admin"><a><FontAwesomeIcon icon={faSignal} color="var(--color-gray-light)" className="ml-3" /></a></Link>
-          <Link href="/Admin/Contacts/List"><a><FontAwesomeIcon icon={faCheckSquare} color="var(--color-gray-light)" className="ml-3" /></a></Link>
-          <Link href="#"><a><FontAwesomeIcon icon={faDollarSign} color="var(--color-gray-light)" className="ml-3" /></a></Link>
+          <Link href="/Admin"><FontAwesomeIcon icon={faSignal} color="var(--color-gray-light)" className="ml-3" /></Link>
+          <Link href="/Admin/Contacts/List"><FontAwesomeIcon icon={faCheckSquare} color="var(--color-gray-light)" className="ml-3" /></Link>
+          <Link href="#"><FontAwesomeIcon icon={faDollarSign} color="var(--color-gray-light)" className="ml-3" /></Link>
         </Col>
     
         <Col lg={6} xs>
