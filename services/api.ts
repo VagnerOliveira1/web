@@ -8,7 +8,10 @@ import Router from 'next/router';
 import { toast } from 'react-toastify';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000'
+  baseURL: 'https://git.heroku.com/pure-retreat-95713.git',
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
 });
 
 // adição da função para setar os headers de authẽnticação na api e nos cookies do browser, iremos utilizar ela no interceptor de request (tanto no fluxo normal quando no fluxo de erro).
@@ -75,11 +78,18 @@ api.interceptors.request.use(req => {
   ) {
     const apiDataCookie = Cookie.get('@api-data');
 
+    let apiData: apiData | null = null;
+
     if (!apiDataCookie) {
       return req;
     }
 
-    const apiData: ApiData = JSON.parse(apiDataCookie);
+    
+    try {
+      apiData = apiDataCookie ? JSON.parse(apiDataCookie) : null;
+    } catch (error) {
+      console.error(`Error parsing cookie data: ${error}`);
+    }
     req.headers = { ...apiData, ...req.headers };
   }
 

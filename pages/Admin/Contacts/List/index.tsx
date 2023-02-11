@@ -100,7 +100,7 @@ const List: React.FC = () => {
             {
               data.contacts.map(contact => (
                 <tr className={styles.table_line} key={contact.id}>
-                  <td>{contact.name}</td>
+                  <td>{contact.full_name}</td>
                   <td>
                     <div className={styles.hover}>
                       <FontAwesomeIcon 
@@ -130,4 +130,4 @@ const List: React.FC = () => {
   )
 }
 
-export default List;
+export default withAuthAdmin(List);

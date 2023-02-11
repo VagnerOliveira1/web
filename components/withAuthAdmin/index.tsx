@@ -12,7 +12,15 @@ const withAuthAdmin = (Component: any) => {
     const loggedUser: User = useSelector((state: AuthState) => state.auth.loggedUser);
     
     const apiDataCookie = Cookie.get('@api-data');
-    const apiData: ApiData = apiDataCookie ? JSON.parse(apiDataCookie) : null;
+
+
+    let apiData: ApiData | null = null;
+    
+    try {
+      apiData = apiDataCookie ? JSON.parse(apiDataCookie) : null;
+    } catch (error) {
+      console.error(`Error parsing cookie data: ${error}`);
+    }
 
     // checando se o usuário existe no redux e se o mesmo é admin
     // checando se os dados da api existem no cookie e ainda se existe

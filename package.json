@@ -26,13 +26,15 @@
     "next": "13.1.6",
     "react": "18.2.0",
     "react-bootstrap": "^1.4.0",
+    "react-datepicker": "^4.10.0",
     "react-dom": "18.2.0",
+    "react-imask": "^6.4.3",
     "react-redux": "^8.0.5",
     "react-toastify": "^9.1.1",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
-    "typescript": "^4.9.5",
-    "swr": "^1.1.2"
+    "swr": "^1.1.2",
+    "typescript": "^4.9.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.2"

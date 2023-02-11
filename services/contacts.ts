@@ -14,8 +14,8 @@ const ContactsService = {
     return api.get<ContactIndexData>(url).then(response => response.data);
   },
   // função para a crição de de um contact
-  create: (full_name: string) => {
-    return api.post<void>('/admin/v1/contacts', { full_name });
+  create: (contact: Contact) => {
+    return api.post<void>('/admin/v1/contacts', { contact});
   },
   // função para a atualização de um contact
   update: ({id, full_name}: Contact) => {
