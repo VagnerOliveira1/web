@@ -16,6 +16,7 @@ import { IMaskInput } from 'react-imask';
 
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+//import { AppState } from '../../../store';
 
 // para que possamos reutilizar o form, necessitaremos de receber o método que será executado quando form for submetido (um para a criação e outro para a atualização da contato) e também o texto do botão de confirmação (action) que é opcional
 interface ContactFormProps {
@@ -38,6 +39,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
 
   // aqui obetmos a contato que estiver armazenada na store do redux para podermos pegar os dados para edição
   const contact = useSelector(state => state.contact);
+  //const contact = useSelector((state: AppState) => state.contact);
 
   const dispatch = useDispatch();
 
