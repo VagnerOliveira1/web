@@ -8,10 +8,7 @@ import Router from 'next/router';
 import { toast } from 'react-toastify';
 
 const api = axios.create({
-  baseURL: 'https://git.heroku.com/pure-retreat-95713.git',
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-  },
+  baseURL: 'http://localhost:3000'
 });
 
 // adição da função para setar os headers de authẽnticação na api e nos cookies do browser, iremos utilizar ela no interceptor de request (tanto no fluxo normal quando no fluxo de erro).

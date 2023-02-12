@@ -5,10 +5,11 @@ import { faGhost, faTimes } from '@fortawesome/free-solid-svg-icons';
 import StyledButton from '../../shared/StyledButton';
 
 import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import styles from '../../../styles/AdminPanel.module.css';
-import Contact from '../../../dtos/Contact';
+import  Contact from '../../../dtos/Contact';
+import { useSelector } from 'react-redux';
 
 import { clearContactToEdit } from '../../../store/modules/admin/contact/reducer';
 
@@ -16,20 +17,75 @@ import { IMaskInput } from 'react-imask';
 
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-//import { AppState } from '../../../store';
+
+import Button from 'react-bootstrap/Button';
+
+import getAddressData from '@/services/address';
+
+import { Modal } from 'react-bootstrap';
+import ModalAddressForm from '@/components/ModalAddress';
 
 // para que possamos reutilizar o form, necessitaremos de receber o método que será executado quando form for submetido (um para a criação e outro para a atualização da contato) e também o texto do botão de confirmação (action) que é opcional
 interface ContactFormProps {
   handleSubmit: (contact: Contact) => Promise<void>;
   action?: string;
 }
+interface Client {
+  name: string;
+  email: string;
+  cpf: string;
+}
 
 
 const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adicionar' }) => {
+  const handleCEPChange = async (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const zipcode = evt.target.value;
+  const addressData = await saveAddress(zipcode);
+
+  setZipcode(zipcode);
+  setNumber(addressData.number);
+  setStreet(addressData.street);
+  setDistrict(addressData.district);
+  setCity(addressData.city);
+
+
+  };
+  const PhoneKinds = {
+    home: 0,
+    office: 1,
+    mobile: 2,
+    whatsapp: 3,
+  };
+  const contact = useSelector((state) => state.contact);
+  const dispatch = useDispatch();
+
   const [full_name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCPF] = useState('');
   const [birth_date, setBirthDate] = useState('');
+  const [phones, setPhones] = useState([{ phone_number: '', kind: PhoneKinds.home }]);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleAddPhone = () => {
+    setPhones([...phones, { phone_number: '', kind: PhoneKinds.home }]);
+  };
+
+
+  const handleRemovePhone = (index) => {
+    setPhones(phones.filter((_, i) => i !== index));
+  };
+
+  const handlePhoneChange = (index, key, value) => {
+    const newPhones = [...phones];
+    newPhones[index][key] = value;
+    setPhones(newPhones);
+  };
+
+  const handlePhoneKindChange = (index: number, value: number) => {
+    const newPhones = [...phones];
+    newPhones[index].kind = value;
+    setPhones(newPhones);
+  };
 
   const today = new Date();
   const maxDate = new Date();
@@ -38,10 +94,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
   minDate.setFullYear(today.getFullYear() - 100);
 
   // aqui obetmos a contato que estiver armazenada na store do redux para podermos pegar os dados para edição
-  const contact = useSelector(state => state.contact);
-  //const contact = useSelector((state: AppState) => state.contact);
 
-  const dispatch = useDispatch();
 
   // checando se a contato não é vazia e se o a url contem a palavra Edit para setar o valor do nome para a edição.
   useEffect(() => {
@@ -50,6 +103,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
       setEmail(contact.email);
       setBirthDate(contact.birth_date);
       setCPF(contact.cpf);
+      setPhones(contact.phone);
     }
   }, [contact]);
 
@@ -61,13 +115,21 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
 
 
     // como o id não é um campo visível, pegamos o mesmo da contato que foi armazenada na store do redux, se a mesma for nula, nulo / undefined é retornado (?., evita termos que faze um if para realizar uma checagem)
-    await handleSubmit({ id: contact?.id, full_name, email, cpf, birth_date});
+    await handleSubmit({ id: contact?.id, full_name, email, cpf, birth_date, phones});
 
 
   }
+      
   
   return (
+    
     <div className={styles.admin_panel}>
+      <ModalAddressForm
+      show={showModal}
+      onHide={() => setShowModal(false)}
+      onSubmit={handleFormSubmit}
+      
+    />
       
       <Form className={styles.new_form} onSubmit={handleFormSubmit}>
         <Form.Label>Nome</Form.Label>
@@ -93,6 +155,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
                 (evt: React.ChangeEvent<HTMLInputElement>) => 
                     setEmail(evt.target.value)
             }
+            onChange={
+                (evt: React.ChangeEvent<HTMLInputElement>) => 
+                    setEmail(evt.target.value)
+            }
             required
             />
         <Form.Label>CPF</Form.Label>
@@ -108,6 +174,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
               }
               required
               />
+          
+        
+
 
         <Form.Label>DataNasc</Form.Label>
           <DatePicker 
@@ -118,6 +187,36 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
             minDate={minDate}
           required 
           />
+          
+          {phones.map((phone, index) => (
+        <div key={index}>
+          <Form.Group>
+            <Form.Label>Número de telefone</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Digite o número de telefone"
+              value={phone.phone_number}
+              onChange={(evt) => handlePhoneChange(index, "phone_number", evt.target.value)}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Tipo de telefone</Form.Label>
+            <Form.Control
+              as="select"
+              value={phone.kind}
+              onChange={(evt) => handlePhoneChange(index, "kind", evt.target.value)}
+            >
+              <option value="">Selecione o tipo de telefone</option>
+              <option value="Casa">Casa</option>
+              <option value="Escritório">Escritório</option>
+              <option value="Celular">Celular</option>
+              <option value="WhatsApp">WhatsApp</option>
+            </Form.Control>
+          </Form.Group>
+          <Button variant="danger" onClick={() => handleRemovePhone(index)}>Remover telefone</Button>
+        </div>
+      ))}
+      <Button variant="primary" onClick={handleAddPhone}>Adicionar telefone</Button>
         <div className={styles.details_button}>
             <StyledButton 
                 icon={faGhost} 
@@ -138,6 +237,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
             />
         </div>
       </Form>
+      <Button variant="primary" onClick={() => setShowModal(true)}>
+          Adicionar Endereço
+          </Button>
+
     </div>
   )
 }

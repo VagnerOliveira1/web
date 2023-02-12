@@ -4,4 +4,16 @@ export default interface Contact {
   email: string;
   cpf: string;
   birth_date: Date;
+  phone:{ 
+    phone_number: string;
+    kind: number;
+  },
+  address:{ 
+    zip_code: string;
+    street: string;
+    number: number;
+    district: string;
+    city: string;
+  }
+
 }
