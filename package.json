@@ -30,10 +30,12 @@
     "react-dom": "18.2.0",
     "react-imask": "^6.4.3",
     "react-redux": "^8.0.5",
+    "react-text-mask": "^5.5.0",
     "react-toastify": "^9.1.1",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
     "swr": "^1.1.2",
+    "text-mask-addons": "^3.8.0",
     "typescript": "^4.9.5"
   },
   "devDependencies": {

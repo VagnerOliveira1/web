@@ -1,14 +1,14 @@
 import api from './api';
 import Contact from '../dtos/Contact';
 import Meta from '../dtos/Meta';
-// criação da interface que será retornada pela listagem de categorias da api.
+// criação da interface que será retornada pela listagem de Contatos da api.
 // por padrão sempre será um array do recurso mas um objeto meta, contendo os dados para a páginação
 interface ContactIndexData {
   contacts: Contact[];
   meta: Meta;
 }
 const ContactsService = {
-  // função que irá realizar o fetch das categorias
+  // função que irá realizar o fetch dos Contatos
   // recebemos a url do SWR e apenas retornamos os dados da reposta para ficar mais fácil a tratativa pelo componente de listagem
   index: (url: string) => {
     return api.get<ContactIndexData>(url).then(response => response.data);

@@ -30,7 +30,7 @@ const New: React.FC = () => {
     <AdminComponent>
       <TitleAdminPanel title="Adicionar Contato" path="Dashboard > Contacts > Adicionar Contato" />
 
-      <ContactForm handleSubmit={handleSubmit} action="Adicionar" />
+      <ContactForm handleSubmit={handleSubmit} action="Salvar Contato" />
     </AdminComponent>
   )
 }

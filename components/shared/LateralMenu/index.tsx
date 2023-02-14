@@ -2,8 +2,10 @@ import React from 'react';
 import Logo from '../Logo';
 import styles from '../../../styles/MenuLateral.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignal, faUser, faGamepad, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignal, faUser,faSignOutAlt, faTableList } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
+import SignOutService from '@/util/SignOutService';
 
 const LateralMenu: React.FC = () => {
     return(
@@ -19,22 +21,21 @@ const LateralMenu: React.FC = () => {
             
           </Link>
 
-          <Link href="/Admin/Users/List">
+          {/* <Link href="/Admin/Users/List">
             
               <FontAwesomeIcon icon={faUser} color="var(--color-gray-light)" className="mr-3" />
               Usuários
               <hr />
             
-          </Link>
+          </Link> */}
           <Link href="/Admin/Contacts/List">
             
-              <FontAwesomeIcon icon={faGamepad} color="var(--color-gray-light)" className="mr-3" />
+              <FontAwesomeIcon icon={faTableList} color="var(--color-gray-light)" className="mr-3" />
               Contatos
               <hr />
             
           </Link>
-          <Link href="/Admin/#">
-          
+          <Link href="/Auth/Login">
             <FontAwesomeIcon icon={faSignOutAlt} color="var(--color-gray-light)" className="mr-3" />
             Sair
             <hr />

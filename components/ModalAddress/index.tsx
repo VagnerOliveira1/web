@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { saveAddress } from '../../services/address';
+import axios from 'axios';
 
 interface Props {
   show: boolean;
@@ -11,19 +11,51 @@ interface Props {
 const ModalAddressForm: React.FC<Props> = ({ show, onHide, onSubmit }) => {
   const [zipcode, setZipcode] = useState('');
   const [city, setCity] = useState('');
+  const [number, setNumber] = useState('');
+  const [street, setStreet] = useState('');
+  const [district, setDistrict] = useState('');
   const [state, setState] = useState('');
 
   useEffect(() => {
     const fetchAddressData = async () => {
-      const addressData = await saveAddress(zipcode);
+      const response = await axios.get(`https://viacep.com.br/ws/${zipcode}/json/`);
+      const addressData = response.data;
       setCity(addressData.localidade);
       setState(addressData.uf);
+      setDistrict(addressData.bairro);
     };
 
     if (zipcode) {
       fetchAddressData();
     }
   }, [zipcode]);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    axios.post(`http://localhost:3000/admin/v1/contacts/${10}/address`, {
+      zipcode,
+      city,
+      state,
+      district,
+      street,
+      number
+    })
+      .then(response => {
+        clearInputs();
+        onHide();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  const clearInputs = () => {
+    setZipcode('');
+    setCity('');
+    setState('');
+    setDistrict('');
+  };
 
   return (
     <Modal show={show} onHide={onHide}>
@@ -50,9 +82,11 @@ const ModalAddressForm: React.FC<Props> = ({ show, onHide, onSubmit }) => {
             <Form.Label>Estado</Form.Label>
             <Form.Control type="text" placeholder="Digite o estado" value={state} disabled />
           </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
+          <Form.Group>
+            <Form.Label>Bairro</Form.Label>
+            <Form.Control type="text" placeholder="Digite o bairro" value={district} />
+          </Form.Group>
+          <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
           Fechar
         </Button>
@@ -60,6 +94,9 @@ const ModalAddressForm: React.FC<Props> = ({ show, onHide, onSubmit }) => {
           Salvar
         </Button>
       </Modal.Footer>
+        </Form>
+      </Modal.Body>
+      
     </Modal>
   );
 };

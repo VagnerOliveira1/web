@@ -11,7 +11,9 @@ const Pagination: React.FunctionComponent<Meta> = ({ page, length, total, total_
 
   //sempre que o total_pages mudar, o array de listagem também deverá mudar
   useEffect(() => {
-    setPagination(PaginationService.execute(total_pages, page));
+    if (total_pages !== undefined && page !== undefined) {
+      setPagination(PaginationService.execute(total_pages, page));
+    }
   }, [total_pages])
 
   // método utilizado para tratar a seleção das páginas
@@ -21,14 +23,14 @@ const Pagination: React.FunctionComponent<Meta> = ({ page, length, total, total_
 
   // método para tratar a seleção da página posterior a atual
   const handleNextPageClick = (): void => {
-    if (page < total_pages) {
+    if ((total_pages !== undefined && page !== undefined) && (page < total_pages)) {
       router.push(`${router.pathname}?page=${page + 1}`)
     }
   }
 
   // método para tratar a seleção da página anterior a atual
   const handlePreviusPageClick = (): void => {
-    if (page > 1) {
+    if((page !== undefined) && (page > 1)) {
       router.push(`${router.pathname}?page=${page - 1}`)
     }
   }

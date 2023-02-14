@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { Form } from 'react-bootstrap';
-import { faGhost, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faClose, faHouse } from '@fortawesome/free-solid-svg-icons';
 import StyledButton from '../../shared/StyledButton';
 
 import { useRouter } from 'next/router';
@@ -40,13 +40,13 @@ interface Client {
 const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adicionar' }) => {
   const handleCEPChange = async (evt: React.ChangeEvent<HTMLInputElement>) => {
   const zipcode = evt.target.value;
-  const addressData = await saveAddress(zipcode);
+  // const addressData = await saveAddress(zipcode);
 
-  setZipcode(zipcode);
-  setNumber(addressData.number);
-  setStreet(addressData.street);
-  setDistrict(addressData.district);
-  setCity(addressData.city);
+  // setZipcode(zipcode);
+  // setNumber(addressData.number);
+  // setStreet(addressData.street);
+  // setDistrict(addressData.district);
+  // setCity(addressData.city);
 
 
   };
@@ -166,6 +166,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
               as={IMaskInput}
               mask="000.000.000-00"
               type="text" 
+              placeholder="Digite CPF somente números"
               className={styles.secundary_input} 
               value={cpf}
               onChange={
@@ -174,59 +175,78 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
               }
               required
               />
-          
-        
-
-
         <Form.Label>DataNasc</Form.Label>
           <DatePicker 
             selected={birth_date} 
             value={birth_date}
+            className={styles.secundary_input} 
             onChange={date => setBirthDate(date)} 
             maxDate={maxDate} 
             minDate={minDate}
           required 
           />
           
-          {phones.map((phone, index) => (
+      {phones && Array.isArray(phones) && phones.map((phone, index) => (
         <div key={index}>
           <Form.Group>
             <Form.Label>Número de telefone</Form.Label>
             <Form.Control
               type="text"
+              className={styles.secundary_input} 
+              as={IMaskInput}
+              mask="(00)00000-0000"
               placeholder="Digite o número de telefone"
               value={phone.phone_number}
               onChange={(evt) => handlePhoneChange(index, "phone_number", evt.target.value)}
+              maxLength={14}
             />
           </Form.Group>
           <Form.Group>
             <Form.Label>Tipo de telefone</Form.Label>
             <Form.Control
+              className={styles.secundary_input} 
               as="select"
               value={phone.kind}
               onChange={(evt) => handlePhoneChange(index, "kind", evt.target.value)}
             >
               <option value="">Selecione o tipo de telefone</option>
-              <option value="Casa">Casa</option>
-              <option value="Escritório">Escritório</option>
-              <option value="Celular">Celular</option>
-              <option value="WhatsApp">WhatsApp</option>
+              <option value="0">Casa</option>
+              <option value="1">Escritório</option>
+              <option value="2">Celular</option>
+              <option value="3">WhatsApp</option>
+              
             </Form.Control>
           </Form.Group>
-          <Button variant="danger" onClick={() => handleRemovePhone(index)}>Remover telefone</Button>
+            <div>
+            
+
+            <StyledButton 
+                icon={faPlus} 
+                action={"Adicionar telefone"} 
+                type_button="red" 
+                onClick={handleAddPhone}
+            />
+            <StyledButton 
+                  icon={faTrash} 
+                  action={"Remover Telefone"} 
+                  type_button="red" 
+                  onClick={() => handleRemovePhone(index)}
+              />
+            </div>
+          
         </div>
       ))}
-      <Button variant="primary" onClick={handleAddPhone}>Adicionar telefone</Button>
+      
         <div className={styles.details_button}>
             <StyledButton 
-                icon={faGhost} 
+                icon={faPlus} 
                 action={action} 
                 type_button="blue" 
                 type="submit"
             />
 
             <StyledButton 
-                icon={faTimes} 
+                icon={faClose} 
                 action={"Cancelar"} 
                 type_button="red" 
                 onClick={() => {
@@ -235,12 +255,20 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
                   router.back();
                 }}
             />
+           
         </div>
+            {
+            router.asPath.includes('Edit') ?
+            <StyledButton 
+            icon={faHouse} 
+            action={"Adicionar Endereço"} 
+            type_button="red" 
+            onClick={() => setShowModal(true)}
+        /> : ''
+          }
       </Form>
-      <Button variant="primary" onClick={() => setShowModal(true)}>
-          Adicionar Endereço
-          </Button>
-
+      
+      
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faFacebookF, faInstagram, faYoutube, faTwitter, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import Logo from '../../Logo';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from '../../../../styles/Footer.module.css';
 
 const FrontFooter: React.FC = () => {
@@ -71,7 +72,8 @@ const FrontFooter: React.FC = () => {
               </Col>
 
               <Col lg={{span: 6, offset: 1}} xs={12}>
-                <p style={{'color': 'var(--color-gray-light)'}}>github.com • ti.vagner@gmail.com</p>
+              <Link href="https://github.com/VagnerOliveira1">github.com • ti.vagner@gmail.com</Link>
+                <p style={{'color': 'var(--color-gray-light)'}}></p>
               </Col>
 
               <Col lg={{span: 2, offset: 1}} xs={{span: 6, offset: 3}}>
