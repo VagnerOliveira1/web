@@ -41,5 +41,9 @@
   "devDependencies": {
     "@types/js-cookie": "^3.0.2",
     "@types/react-datepicker": "^4.8.0"
+  },
+  "engines": {
+    "node": "16.0.0"
   }
+  
 }

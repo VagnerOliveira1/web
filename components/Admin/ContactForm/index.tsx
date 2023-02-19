@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 
 import { Form } from 'react-bootstrap';
@@ -9,7 +10,6 @@ import { useDispatch } from 'react-redux';
 
 import styles from '../../../styles/AdminPanel.module.css';
 import  Contact from '../../../dtos/Contact';
-import { useSelector } from 'react-redux';
 
 import { clearContactToEdit } from '../../../store/modules/admin/contact/reducer';
 
@@ -29,11 +29,6 @@ import ModalAddressForm from '@/components/ModalAddress';
 interface ContactFormProps {
   handleSubmit: (contact: Contact) => Promise<void>;
   action?: string;
-}
-interface Client {
-  name: string;
-  email: string;
-  cpf: string;
 }
 
 
@@ -56,7 +51,6 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
     mobile: 2,
     whatsapp: 3,
   };
-  const contact = useSelector((state) => state.contact);
   const dispatch = useDispatch();
 
   const [full_name, setName] = useState('');
@@ -93,8 +87,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ handleSubmit, action = 'Adici
   const minDate = new Date();
   minDate.setFullYear(today.getFullYear() - 100);
 
-  // aqui obetmos a contato que estiver armazenada na store do redux para podermos pegar os dados para edição
+  // aqui obetemos a contato que estiver armazenada na store do redux para podermos pegar os dados para edição
 
+  const contact = useSelector((state: Contact) => state.contact);
 
   // checando se a contato não é vazia e se o a url contem a palavra Edit para setar o valor do nome para a edição.
   useEffect(() => {

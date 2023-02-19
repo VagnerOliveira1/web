@@ -1,4 +1,4 @@
-export default interface Contact {
+interface Contact {
   id: number;
   full_name: string;
   email: string;
@@ -7,13 +7,10 @@ export default interface Contact {
   phone:{ 
     phone_number: string;
     kind: number;
-  },
-  address:{ 
-    zip_code: string;
-    street: string;
-    number: number;
-    district: string;
-    city: string;
   }
-
 }
+interface RootState {
+  contact: Contact;
+}
+
+export default RootState;
